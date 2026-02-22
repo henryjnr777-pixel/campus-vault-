@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Campus Vault</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo-img">
+            <h2>Campus Vault</h2>
+        </div>
+
+        <div class="nav-user">
+            <span class="user-name">{{ current_user.username }}</span>
+            <a href="/settings" class="logout-btn"
+                style="background: transparent; border: 1px solid #3b82f6; color: #3b82f6; margin-right: 10px;">⚙️
+                Settings</a>
+            <a href="/logout" class="logout-btn">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom: 20px;">
+            {% for category, message in messages %}
+            <div style="padding: 15px; border-radius: 12px; color: white; font-weight: bold; 
+                 box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                 background-color: {{ '#ef4444' if category == 'error' else '#10b981' }};">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="dashboard">
+            <div class="card balance">
+                <h3>Total Balance</h3>
+                <p>₦{{ "{:,.2f}".format(balance) }}</p>
+            </div>
+            <div class="card">
+                <h3>Income</h3>
+                <p style="color: #10b981;">+ ₦{{ "{:,.2f}".format(income) }}</p>
+            </div>
+            <div class="card">
+                <h3>Expenses</h3>
+                <p style="color: #ef4444;">- ₦{{ "{:,.2f}".format(expenses) }}</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+
+            <div class="form-section">
+                <h3 class="section-title">New Transaction</h3>
+                <div class="form-container">
+                    <form action="/add" method="POST">
+                        <input type="text" name="description" placeholder="Description (e.g. Rice)" required>
+                        <input type="number" name="amount" placeholder="Amount (e.g. 2000.50)" step="0.01" required>
+                        <select name="type">
+                            <option value="Expense">Expense 💸</option>
+                            <option value="Income">Income 💰</option>
+                        </select>
+                        <button type="submit">Add Transaction</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 class="section-title" style="margin-bottom: 0;">Recent Activity</h3>
+                    <a href="/export" class="export-btn">📥 Download CSV</a>
+                </div>
+                <div class="history">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if transactions|length > 0 %}
+                            {% for t in transactions %}
+                            <tr class="{{ t.type }}">
+                                <td>{{ t.description }}</td>
+                                <td style="color: #94a3b8; font-size: 0.85rem;">{{ t.date.strftime('%d %b') }}</td>
+                                <td>{{ t.type }}</td>
+                                <td>₦{{ "{:,.2f}".format(t.amount) }}</td>
+                                <td><a href="/delete/{{ t.id }}" class="delete-btn">&times;</a></td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align:center; color: #64748b; padding: 20px;">
+                                    No transactions yet. Start saving! 🚀
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

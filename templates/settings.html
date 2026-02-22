@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Settings - Campus Vault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav>
+        <h2>Campus Vault</h2>
+        <div class="nav-user">
+            <a href="/" class="logout-btn" style="border: 1px solid #fff; color: white; margin-right: 10px;">Back to
+                Dashboard</a>
+            <a href="/logout" class="logout-btn">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 500px;">
+        <h3 class="section-title">Budget Settings</h3>
+
+        <div class="form-container">
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                Set your "Panic Limit." We will alert you if a single expense exceeds this amount.
+            </p>
+
+            <form method="POST">
+                <label style="color: white; font-weight: bold;">My Spending Limit (₦)</label>
+                <input type="number" name="budget" value="{{ user.budget }}" required>
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

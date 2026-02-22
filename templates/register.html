@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+
+    <title>Register - Campus Vault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+    <div class="auth-container">
+
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="auth-logo">
+
+        <h2>Join Campus Vault</h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div style="color: #ef4444; margin-bottom: 15px; font-weight: bold;">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Choose a Username" required>
+            <input type="password" name="password" placeholder="Choose a Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="/login">Log In</a></p>
+    </div>
+</body>
+
+</html>
