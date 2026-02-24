@@ -357,3 +357,17 @@ td {
     color: white;
     box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
 }
+
+/* Mobile Responsive Fix for Settings */
+@media screen and (max-width: 768px) {
+
+    .settings-container,
+    .form-container,
+    .settings-box {
+        /* Adjusts whatever class name you used */
+        width: 90% !important;
+        max-width: 100% !important;
+        margin: 20px auto !important;
+        padding: 20px !important;
+    }
+}
